@@ -70,12 +70,11 @@ public class CameraController : MonoBehaviour
         
         //Allows manual controll of node traversal
         if (Input.anyKeyDown && m_FormerNodeInputControl != KeyCode.None && m_UpcomingNodeInputControl != KeyCode.None)
-           // if (m_Director.state != PlayState.Playing)
                 CheckInputControl();
         if (m_Director.state != PlayState.Playing)
         {
             m_AutoRotateOnStart = true;
-            m_PauseLerping = false;
+            // m_PauseLerping = false;
         }
         else if (m_Director.state == PlayState.Playing && !m_PauseLerping)
         {
@@ -83,6 +82,7 @@ public class CameraController : MonoBehaviour
             m_Leg.transform.rotation = Quaternion.Lerp(m_Leg.transform.rotation, m_LegAtStart, m_Speed * Time.deltaTime);
             m_Foot.transform.rotation = Quaternion.Lerp(m_Foot.transform.rotation, m_FootAtStart, m_Speed * Time.deltaTime);
         }
+        
         //AutoRotates subjects
         if (m_AutoRotateOnStart)
             AutoRotateObject();
@@ -130,8 +130,12 @@ public class CameraController : MonoBehaviour
             case 2:
 
                 m_Director.playableAsset = m_TTwo;
-                m_PauseLerping = true;
                 m_Director.Play();
+                m_PauseLerping = true;
+                m_Leg.transform.rotation = m_LegAtStart;
+                m_Foot.transform.rotation = m_FootAtStart;
+                m_AutoRotateOnStart = false;
+
                 break;
             case 3:
                 m_Director.playableAsset = m_TThree;
