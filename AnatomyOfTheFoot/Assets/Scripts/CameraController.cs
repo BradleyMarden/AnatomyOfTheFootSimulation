@@ -33,6 +33,9 @@ public class CameraController : MonoBehaviour
     [SerializeField] private TimelineAsset m_TOne;
     [SerializeField] private TimelineAsset m_TTwo;
     [SerializeField] private TimelineAsset m_TThree;
+    [SerializeField] private TimelineAsset m_TFour;
+    [SerializeField] private TimelineAsset m_TFive;
+    [SerializeField] private TimelineAsset m_TSix;
     [SerializeField] PlayableDirector m_Director;
     [SerializeField] private float m_Speed = 30;
 
@@ -52,7 +55,7 @@ public class CameraController : MonoBehaviour
     private int pressed = 0;
     private Quaternion m_LegAtStart;
     private Quaternion m_FootAtStart;
-    private bool m_RotationCheck = false;
+    private bool m_PauseLerping = false;
     void Start()
     {
         //Init camera state to zero
@@ -72,14 +75,13 @@ public class CameraController : MonoBehaviour
         if (m_Director.state != PlayState.Playing)
         {
             m_AutoRotateOnStart = true;
-            m_RotationCheck = false;
+            m_PauseLerping = false;
         }
-        else if (m_Director.state == PlayState.Playing && !m_RotationCheck)
+        else if (m_Director.state == PlayState.Playing && !m_PauseLerping)
         {
-            m_RotationCheck = true;
             m_AutoRotateOnStart = false;
-            m_Leg.transform.rotation = m_LegAtStart;
-            m_Foot.transform.rotation = m_FootAtStart;
+            m_Leg.transform.rotation = Quaternion.Lerp(m_Leg.transform.rotation, m_LegAtStart, m_Speed * Time.deltaTime);
+            m_Foot.transform.rotation = Quaternion.Lerp(m_Foot.transform.rotation, m_FootAtStart, m_Speed * Time.deltaTime);
         }
         //AutoRotates subjects
         if (m_AutoRotateOnStart)
@@ -96,7 +98,7 @@ public class CameraController : MonoBehaviour
             //resets timeline and moves all objects back to original position
             m_Director.time = 0;
             m_Director.Evaluate();
-            if (pressed != 3) //max
+            if (pressed != 6) //max
                 pressed++;
             PlayTimelineAnim(pressed);
             //progress node.
@@ -122,15 +124,33 @@ public class CameraController : MonoBehaviour
         {
             case 1:
                 m_Director.playableAsset = m_TOne;
+                m_PauseLerping = false;
                 m_Director.Play();
                 break;
             case 2:
 
                 m_Director.playableAsset = m_TTwo;
+                m_PauseLerping = true;
                 m_Director.Play();
                 break;
             case 3:
                 m_Director.playableAsset = m_TThree;
+                m_PauseLerping = false;
+                m_Director.Play();
+                break;
+            case 4:
+                m_Director.playableAsset = m_TFour;
+                m_PauseLerping = false;
+                m_Director.Play();
+                break;
+            case 5:
+                m_Director.playableAsset = m_TFive;
+                m_PauseLerping = false;
+                m_Director.Play();
+                break;
+            case 6:
+                m_Director.playableAsset = m_TSix;
+                m_PauseLerping = false;
                 m_Director.Play();
                 break;
         }
