@@ -4,26 +4,14 @@ using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 
-//Holds all node info, e.g pos, name
-struct BoneNode
-{
-  //  List<TimelineAsset> s_Parts;
-
-
-
-};
 public class CameraController : MonoBehaviour
 {
     //Visble In Editor
     [Header("Node Input Controlls")]
-    [Tooltip("Input type to move to upcoming node. NOTE: If state is 'NONE' scene will automatically progess through nodes")]
+    [Tooltip("Input type to move to upcoming node. NOTE: If state is 'NONE', camera will only rotate around foot")]
     [SerializeField] private KeyCode m_UpcomingNodeInputControl = KeyCode.RightArrow;
-    [Tooltip("Input type to move to former node. NOTE: If state is 'NONE' scene will automatically progess through nodes")]
+    [Tooltip("Input type to move to former node. NOTE: If state is 'NONE', camera will only rotate around foot")]
     [SerializeField] private KeyCode m_FormerNodeInputControl = KeyCode.LeftArrow;
-    [Tooltip("Speed of node progression when in 'NONE' state. DEFUALT: 5")]
-    [SerializeField] private int m_AutoNodeProgressSpeed = 5;
-    [Tooltip("AutoRotate on start, otherwise will start progressing into first node.")]
-    [SerializeField] private bool m_AutoRotateOnStart = false;
     [Tooltip("AutoRotate speed, DEFAULT: 30.0f")]
     [SerializeField] private float m_RotateSpeed = 30.0f;
 
@@ -51,11 +39,12 @@ public class CameraController : MonoBehaviour
 
     private static int m_NoOfNodes = 10;
     private CameraState m_CameraState;
-    private BoneNode[] m_ArrayOfNodes = new BoneNode[m_NoOfNodes];
     private int pressed = 0;
     private Quaternion m_LegAtStart;
     private Quaternion m_FootAtStart;
     private bool m_PauseLerping = false;
+    private bool m_AutoRotateOnStart = false;
+
     void Start()
     {
         //Init camera state to zero
